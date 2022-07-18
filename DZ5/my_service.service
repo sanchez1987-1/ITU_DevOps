@@ -1,0 +1,21 @@
+[Unit]
+Description=My First Service 
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+Restart=no
+RemainAfterExit=yes
+User=vm
+#RestartPreventExitStatus=
+ExecStartPre=-/usr/bin/docker rm -f nginx
+ExecStart=/usr/bin/docker run --rm --name nginx -d -p 8081:80 nginx
+ExecReload=/usr/bin/docker restart nginx
+ExecStop=/usr/bin/docker stop -t 2 nginx
+ExecStopPost=/usr/bin/docker rm -f nginx
+Restart=on-failure
+#TimeoutSec=10
+
+[Install]
+WantedBy=default.target
