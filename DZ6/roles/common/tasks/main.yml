@@ -1,0 +1,36 @@
+- name: Copy repo Alpine
+  copy:
+     src: repositories
+     dest: /etc/apk/repositories
+  when: ansible_os_family == "Alpine"
+
+- name: upgrade available Alpine
+  apk:
+      available: yes
+      upgrade: yes
+      update_cache: yes
+  when: ansible_os_family == "Alpine"
+
+- name: install Docker on Alpine
+  apk:
+     name: docker
+     update_cache: yes
+  when: ansible_os_family == "Alpine"
+
+- name: upgrade available Debian/Ubuntu
+  apt:
+     upgrade: yes
+     update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: install Docker on Debian/Ubuntu
+  apt:
+     name: docker
+     update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: display uptime
+  shell: uptime
+  register: hostname
+- debug:
+    var: hostname
